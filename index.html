@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tüysüz Ailesi</title>
     <!-- Tailwind CSS (Tasarım için) -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -29,50 +29,58 @@
             background-color: #fef3c7; /* amber-100 */
             color: #78350f; /* amber-900 */
         }
+        /* Mobilde daha akıcı kaydırma için */
+        .modal-scroll {
+            -webkit-overflow-scrolling: touch;
+        }
     </style>
 </head>
-<body class="min-h-screen bg-[#F8F9FA] text-slate-800 font-sans pb-20">
+<body class="min-h-screen bg-[#F8F9FA] text-slate-800 font-sans pb-12 md:pb-20">
 
     <!-- Üst Kısım - Zarif Başlık -->
-    <header class="pt-20 pb-16 px-4 text-center">
-        <h1 class="text-4xl md:text-5xl font-serif text-slate-900 uppercase tracking-[0.2em] mb-4">
+    <header class="pt-12 md:pt-20 pb-10 md:pb-16 px-4 text-center">
+        <h1 class="text-3xl md:text-5xl font-serif text-slate-900 uppercase tracking-[0.15em] md:tracking-[0.2em] mb-4">
             Tüysüz Ailesi
         </h1>
-        <div class="w-16 h-[1px] bg-amber-600 mx-auto mb-6"></div>
-        <p class="text-slate-500 font-light tracking-wider uppercase text-sm">
+        <div class="w-12 md:w-16 h-[1px] bg-amber-600 mx-auto mb-4 md:mb-6"></div>
+        <p class="text-slate-500 font-light tracking-wider uppercase text-xs md:text-sm">
             Kuşaktan Kuşağa, Bir Arada
         </p>
     </header>
 
     <!-- Ana İçerik - Minimalist Kart Galerisi -->
     <main class="max-w-6xl mx-auto px-4 md:px-8">
-        <div id="kisi-listesi" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        <!-- Mobilde tek kolon, tablette 2 kolon, bilgisayarda 3 kolon -->
+        <div id="kisi-listesi" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
             <!-- Kişiler buraya JavaScript ile eklenecek -->
         </div>
     </main>
 
     <!-- Açılır Pencere (Modal) - Editoryal Detay Görünümü -->
-    <div id="modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 md:p-8 opacity-0 transition-opacity duration-300">
-        <div class="bg-white w-full max-w-4xl flex flex-col md:flex-row shadow-2xl rounded-xl overflow-hidden max-h-[90vh]">
+    <div id="modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center z-50 p-3 sm:p-4 md:p-8 opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-full max-w-4xl flex flex-col md:flex-row shadow-2xl rounded-2xl overflow-hidden max-h-[92vh] md:max-h-[90vh] relative">
             
-            <!-- Sol Taraf - Fotoğraf Alanı -->
+            <!-- Mobilde Kapatma Butonu (Daha büyük ve belirgin) -->
+            <button onclick="kapatModal()" class="absolute top-3 right-3 md:top-6 md:right-6 text-slate-500 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 md:bg-transparent md:hover:bg-transparent rounded-full p-2 transition-colors z-20 shadow-sm md:shadow-none">
+                <i data-lucide="x" class="w-5 h-5 md:w-6 md:h-6" stroke-width="2"></i>
+            </button>
+
+            <!-- Sol Taraf - Fotoğraf Alanı (Sadece Masaüstü/Tablet) -->
             <div class="md:w-2/5 bg-slate-50 p-8 items-center justify-center border-r border-slate-100 relative hidden md:flex">
                 <img id="modal-resim-masaustu" src="" alt="" class="w-full max-w-[250px] aspect-square object-cover rounded-full filter grayscale shadow-lg border-4 border-white" onerror="this.src='https://via.placeholder.com/250?text=Fotograf+Yok'"/>
             </div>
 
             <!-- Sağ Taraf - İçerik Alanı -->
-            <div class="md:w-3/5 p-8 md:p-12 relative overflow-y-auto">
-                <button onclick="kapatModal()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-900 transition-colors p-2">
-                    <i data-lucide="x" class="w-6 h-6" stroke-width="1.5"></i>
-                </button>
-
-                <div class="mb-10 pr-8">
-                    <!-- Mobilde resmi başlığın yanında göster (Tablet/Desktop'ta gizli) -->
-                    <div class="md:hidden flex items-center gap-4 mb-6">
-                        <img id="modal-resim-mobil" src="" alt="" class="w-20 h-20 rounded-full object-cover filter grayscale border-2 border-slate-200" onerror="this.src='https://via.placeholder.com/150?text=Fotograf+Yok'"/>
+            <!-- Mobilde kaydırmayı kolaylaştırmak için modal-scroll sınıfı eklendi -->
+            <div class="w-full md:w-3/5 p-6 md:p-12 relative overflow-y-auto modal-scroll">
+                
+                <div class="mb-6 md:mb-10 pr-10 md:pr-8">
+                    <!-- Mobilde resmi başlığın yanında göster -->
+                    <div class="md:hidden flex items-center gap-4 mb-4">
+                        <img id="modal-resim-mobil" src="" alt="" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover filter grayscale border-2 border-slate-200 shadow-sm" onerror="this.src='https://via.placeholder.com/150?text=Fotograf+Yok'"/>
                         <div>
-                            <h2 id="modal-isim-mobil" class="text-3xl font-serif text-slate-900 leading-tight"></h2>
-                            <span id="modal-unvan-mobil" class="text-xs uppercase tracking-widest text-amber-700 font-semibold block mt-1"></span>
+                            <h2 id="modal-isim-mobil" class="text-2xl sm:text-3xl font-serif text-slate-900 leading-tight"></h2>
+                            <span id="modal-unvan-mobil" class="text-[10px] sm:text-xs uppercase tracking-widest text-amber-700 font-bold block mt-1"></span>
                         </div>
                     </div>
 
@@ -83,32 +91,32 @@
                     </div>
                 </div>
 
-                <div class="space-y-8">
+                <div class="space-y-6 md:space-y-8">
                     <!-- Hakkında Bölümü -->
                     <div>
-                        <h3 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-slate-900 mb-3">
+                        <h3 class="flex items-center gap-2 text-[10px] md:text-xs font-semibold uppercase tracking-widest text-slate-900 mb-2 md:mb-3">
                             <i data-lucide="book-open" class="w-4 h-4 text-amber-600"></i> Hakkında
                         </h3>
-                        <p id="modal-hakkinda" class="text-slate-600 leading-relaxed font-light text-[15px]"></p>
+                        <p id="modal-hakkinda" class="text-slate-600 leading-relaxed font-light text-sm md:text-[15px]"></p>
                     </div>
 
                     <!-- İlginç Detay Bölümü (Varsa gösterilecek) -->
                     <div id="modal-detay-alani" class="hidden">
-                        <div class="w-full h-[1px] bg-slate-100 mb-8"></div>
-                        <h3 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-slate-900 mb-3">
+                        <div class="w-full h-[1px] bg-slate-100 mb-6 md:mb-8"></div>
+                        <h3 class="flex items-center gap-2 text-[10px] md:text-xs font-semibold uppercase tracking-widest text-slate-900 mb-2 md:mb-3">
                             <i data-lucide="fingerprint" class="w-4 h-4 text-amber-600"></i> İlginç Bir Detay
                         </h3>
-                        <p id="modal-detay" class="text-slate-600 leading-relaxed font-light text-[15px]"></p>
+                        <p id="modal-detay" class="text-slate-600 leading-relaxed font-light text-sm md:text-[15px]"></p>
                     </div>
 
                     <!-- Favori Söz Bölümü (Varsa gösterilecek) -->
-                    <div id="modal-soz-alani" class="hidden pt-4">
-                        <h3 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-slate-400 mb-4">
+                    <div id="modal-soz-alani" class="hidden pt-2 md:pt-4">
+                        <h3 class="flex items-center gap-2 text-[10px] md:text-xs font-semibold uppercase tracking-widest text-slate-400 mb-3 md:mb-4">
                             Sıkça Duyduğumuz Bir Söz
                         </h3>
-                        <div class="flex gap-4 items-start bg-slate-50 p-6 rounded-r-lg border-l-2 border-amber-600">
-                            <i data-lucide="quote" class="w-8 h-8 text-amber-200 flex-shrink-0" style="transform: rotate(180deg);"></i>
-                            <p id="modal-soz" class="text-xl font-serif italic text-slate-800 pt-1"></p>
+                        <div class="flex gap-3 md:gap-4 items-start bg-slate-50 p-4 md:p-6 rounded-r-lg md:rounded-r-xl border-l-2 border-amber-600">
+                            <i data-lucide="quote" class="w-6 h-6 md:w-8 md:h-8 text-amber-200 flex-shrink-0" style="transform: rotate(180deg);"></i>
+                            <p id="modal-soz" class="text-lg md:text-xl font-serif italic text-slate-800 pt-1"></p>
                         </div>
                     </div>
 
@@ -120,7 +128,6 @@
     <!-- JavaScript - Sitenin Mantığı -->
     <script>
         // SÜLALE ÜYELERİNİN BİLGİLERİ
-        // resim isimlerini yerel dosyalara (nuri.png vb.) güncelledik.
         const familyMembers = [
             {
                 id: 1,
@@ -345,14 +352,14 @@
             const liste = document.getElementById('kisi-listesi');
             
             liste.innerHTML = familyMembers.map(kisi => `
-                <div onclick="acModal(${kisi.id})" class="bg-white p-10 flex flex-col items-center text-center group cursor-pointer border border-slate-100 shadow-sm hover:shadow-xl hover:border-amber-200 transition-all duration-500 rounded-sm">
-                    <div class="relative mb-6">
+                <div onclick="acModal(${kisi.id})" class="bg-white p-6 md:p-10 flex flex-col items-center text-center group cursor-pointer border border-slate-100 shadow-sm hover:shadow-xl hover:border-amber-200 transition-all duration-500 rounded-lg md:rounded-sm">
+                    <div class="relative mb-4 md:mb-6">
                         <div class="absolute inset-0 rounded-full border border-slate-200 scale-110 group-hover:scale-100 group-hover:border-amber-400 transition-all duration-500"></div>
-                        <img src="${kisi.resim}" alt="${kisi.isim}" class="w-32 h-32 rounded-full object-cover filter grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 shadow-md" onerror="this.src='https://via.placeholder.com/150?text=Fotograf+Yok'"/>
+                        <img src="${kisi.resim}" alt="${kisi.isim}" class="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover filter grayscale opacity-90 md:opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 shadow-md" onerror="this.src='https://via.placeholder.com/150?text=Fotograf+Yok'"/>
                     </div>
-                    <h2 class="text-2xl font-serif text-slate-900 mb-2">${kisi.isim}</h2>
-                    <p class="text-xs uppercase tracking-widest text-amber-700 font-semibold mb-6">${kisi.unvan}</p>
-                    <div class="flex items-center text-xs text-slate-400 group-hover:text-amber-600 transition-colors uppercase tracking-widest gap-1 mt-auto">
+                    <h2 class="text-xl md:text-2xl font-serif text-slate-900 mb-1 md:mb-2">${kisi.isim}</h2>
+                    <p class="text-[10px] md:text-xs uppercase tracking-widest text-amber-700 font-semibold mb-4 md:mb-6">${kisi.unvan}</p>
+                    <div class="flex items-center text-[10px] md:text-xs text-slate-400 group-hover:text-amber-600 transition-colors uppercase tracking-widest gap-1 mt-auto">
                         Profili İncele <i data-lucide="chevron-right" class="w-4 h-4 transform group-hover:translate-x-1 transition-transform"></i>
                     </div>
                 </div>
@@ -404,6 +411,10 @@
             // Modalı Göster
             modal.classList.remove('hidden');
             modal.classList.add('flex');
+            
+            // Mobilde arkadaki sayfanın kaymasını engelle
+            document.body.style.overflow = 'hidden';
+
             // Animasyon için hafif bir gecikme
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
@@ -416,6 +427,9 @@
             setTimeout(() => {
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
+                
+                // Arka sayfanın kaydırmasını geri aç
+                document.body.style.overflow = '';
             }, 300); // 300ms animasyon süresi
         }
         
